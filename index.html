@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Rekapan Pembayaran Toll Parkir</title>
+
+<!-- PDF Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    margin:10px;
+    background:#f5f5f5;
+}
+
+.container{
+    background:#fff;
+    padding:12px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.10);
+}
+
+h2{
+    text-align:center;
+    font-size:20px;
+    margin-bottom:15px;
+}
+
+.info-box,.total-box{
+    border:1px solid #999;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:15px;
+    background:#fafafa;
+}
+
+.info-row,.total-row{
+    display:flex;
+    align-items:center;
+    margin:6px 0;
+    gap:8px;
+}
+
+.info-label,.total-label{
+    width:110px;
+    font-size:12px;
+}
+
+.info-input,.total-input{
+    width:220px;
+    padding:6px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    box-sizing:border-box;
+    font-size:12px;
+}
+
+.top-btn,.pdf-btn{
+    background:#1976d2;
+    color:white;
+    border:none;
+    padding:7px 12px;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:12px;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    min-width:950px;
+    border-collapse:collapse;
+}
+
+th,td{
+    border:1px solid #ddd;
+    text-align:center;
+    padding:5px;
+    font-size:12px;
+}
+
+th{
+    background:#1976d2;
+    color:white;
+}
+
+input,select{
+    padding:4px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    box-sizing:border-box;
+    font-size:12px;
+}
+
+input[type="date"]{
+    width:120px;
+}
+
+input[type="number"]{
+    width:60px;
+}
+
+.rupiah{
+    width:90px;
+}
+
+.textbox{
+    width:100px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>LAPORAN TOLL PARKIR</h2>
+
+<div class="info-box">
+
+<div class="info-row">
+<span class="info-label">Nama User</span>
+<input id="namaUser" class="info-input" value="Mr. Takuya Yokohama">
+</div>
+
+<div class="info-row">
+<span class="info-label">Driver</span>
+<input id="driver" class="info-input" value="Surki">
+</div>
+
+<div class="info-row">
+
+<span class="info-label">Periode</span>
+
+<select id="bulan" class="info-input" style="width:120px;">
+<option value="">Bulan</option>
+<option>Januari</option>
+<option>Februari</option>
+<option>Maret</option>
+<option>April</option>
+<option>Mei</option>
+<option>Juni</option>
+<option>Juli</option>
+<option>Agustus</option>
+<option>September</option>
+<option>Oktober</option>
+<option>November</option>
+<option>Desember</option>
+</select>
+
+<select id="tahun" class="info-input" style="width:90px;">
+<option value="">Tahun</option>
+<option>2026</option>
+<option>2027</option>
+<option>2028</option>
+<option>2029</option>
+<option>2030</option>
+</select>
+
+<button class="top-btn" onclick="tampilkanPeriode()">Tampilkan</button>
+
+</div>
+
+</div>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+<tr>
+<th>No</th>
+<th>Tanggal</th>
+<th>Lokasi Awal</th>
+<th>Tujuan Akhir</th>
+<th>Parkir</th>
+<th>Flazz BCA</th>
+<th>Tunai</th>
+<th>KM</th>
+<th>Aksi</th>
+</tr>
+</thead>
+
+<tbody id="tableBody">
+</tbody>
+
+</table>
+
+</div>
+
+<div class="total-box">
+
+<div class="total-row">
+<span class="total-label">Total Flazz BCA</span>
+<input id="totalFlazz" class="total-input" readonly>
+</div>
+
+<div class="total-row">
+<span class="total-label">Total Tunai</span>
+<input id="totalTunai" class="total-input" readonly>
+</div>
+
+<div class="total-row">
+<span class="total-label">Sub Total</span>
+<input id="grandTotal" class="total-input" readonly>
+</div>
+
+<br>
+
+<button class="pdf-btn" onclick="exportPDF()">Export PDF</button>
+
+</div>
+
+</div>
+<script>
+
+const body = document.getElementById("tableBody");
+
+/* =========================
+   PERIODE
+========================= */
+
+function ambilPeriode(){
+
+  let bulan =
+  document.getElementById("bulan").value;
+
+  let tahun =
+  document.getElementById("tahun").value;
+
+  if(bulan==="" || tahun===""){
+    return "";
+  }
+
+  return bulan + " " + tahun;
+}
+
+/* =========================
+   TEMPLATE ROW
+========================= */
+
+function buatRow(no,data={}){
+
+return `
+<tr>
+
+<td>${no}</td>
+
+<td>
+<input type="date"
+value="${data.tanggal || ''}">
+</td>
+
+<td>
+<input class="textbox"
+type="text"
+value="${data.awal || ''}">
+</td>
+
+<td>
+<input class="textbox"
+type="text"
+value="${data.akhir || ''}">
+</td>
+
+<td>
+<input class="textbox"
+type="text"
+value="${data.parkir || ''}">
+</td>
+
+<td>
+<input class="rupiah flazz"
+type="text"
+value="${data.flazz || ''}">
+</td>
+
+<td>
+<input class="rupiah tunai"
+type="text"
+value="${data.tunai || ''}">
+</td>
+
+<td>
+<input type="number"
+value="${data.km || ''}">
+</td>
+
+<td>
+<select onchange="aksiBaris(this)">
+<option value="">Pilih</option>
+<option value="simpan">Simpan</option>
+<option value="tambah">Tambah</option>
+<option value="hapus">Hapus</option>
+</select>
+</td>
+
+</tr>
+`;
+}
+
+/* =========================
+   FORMAT RUPIAH
+========================= */
+
+function formatRupiah(angka){
+
+let number =
+angka.replace(/[^0-9]/g,'');
+
+if(number==="") return "";
+
+return "Rp. " +
+Number(number)
+.toLocaleString("id-ID");
+}
+
+/* =========================
+   HITUNG TOTAL
+========================= */
+
+function hitungTotal(){
+
+let totalFlazz = 0;
+let totalTunai = 0;
+
+document
+.querySelectorAll("#tableBody tr")
+.forEach(row=>{
+
+let inputs =
+row.querySelectorAll("input");
+
+let flazz =
+inputs[4].value
+.replace(/[^0-9]/g,'');
+
+let tunai =
+inputs[5].value
+.replace(/[^0-9]/g,'');
+
+totalFlazz += Number(flazz || 0);
+totalTunai += Number(tunai || 0);
+
+});
+
+let subtotal =
+totalFlazz + totalTunai;
+
+document
+.getElementById("totalFlazz").value =
+"Rp. " +
+totalFlazz.toLocaleString("id-ID");
+
+document
+.getElementById("totalTunai").value =
+"Rp. " +
+totalTunai.toLocaleString("id-ID");
+
+document
+.getElementById("grandTotal").value =
+"Rp. " +
+subtotal.toLocaleString("id-ID");
+
+}
+
+/* =========================
+   INPUT EVENT
+========================= */
+
+document.addEventListener(
+"input",
+function(e){
+
+if(
+e.target.classList.contains("rupiah")
+){
+  e.target.value =
+  formatRupiah(e.target.value);
+}
+
+hitungTotal();
+
+}
+);
+
+/* =========================
+   UPDATE NOMOR
+========================= */
+
+function updateNomor(){
+
+let rows =
+document.querySelectorAll(
+"#tableBody tr"
+);
+
+rows.forEach((row,index)=>{
+
+row.cells[0].innerText =
+index + 1;
+
+});
+
+}
+
+/* =========================
+   SAVE SATU BARIS
+========================= */
+
+function saveBaris(row){
+
+let periode =
+ambilPeriode();
+
+if(periode===""){
+  alert("Periode wajib diisi");
+  return false;
+}
+
+let tanggal =
+row.querySelector(
+'input[type="date"]'
+).value;
+
+if(tanggal===""){
+  alert("Tanggal wajib diisi");
+  return false;
+}
+
+let no =
+parseInt(row.cells[0].innerText)-1;
+
+let allData =
+JSON.parse(
+localStorage.getItem(
+"databaseRekap"
+)
+) || {};
+
+if(!allData[periode]){
+
+allData[periode] = {
+namaUser:
+document
+.getElementById(
+"namaUser"
+).value,
+
+driver:
+document
+.getElementById(
+"driver"
+).value,
+
+periode:periode,
+
+rows:[]
+};
+
+}
+
+let inputs =
+row.querySelectorAll(
+"input"
+);
+
+let rowData = {
+
+tanggal: inputs[0].value,
+awal: inputs[1].value,
+akhir: inputs[2].value,
+parkir: inputs[3].value,
+flazz: inputs[4].value,
+tunai: inputs[5].value,
+km: inputs[6].value
+
+};
+
+allData[periode]
+.rows[no] = rowData;
+
+localStorage.setItem(
+"databaseRekap",
+JSON.stringify(allData)
+);
+
+localStorage.setItem(
+"lastPeriode",
+periode
+);
+
+alert("Data berhasil disimpan");
+
+return true;
+
+}
+
+/* =========================
+   AKSI BARIS
+========================= */
+
+function aksiBaris(el){
+
+let row =
+el.closest("tr");
+
+if(el.value==="simpan"){
+
+saveBaris(row);
+
+}
+
+if(el.value==="tambah"){
+
+row.insertAdjacentHTML(
+"afterend",
+buatRow(0)
+);
+
+updateNomor();
+
+}
+
+if(el.value==="hapus"){
+
+row.remove();
+
+updateNomor();
+
+}
+
+el.value="";
+
+}
+
+/* =========================
+   TAMPILKAN DATA PERIODE
+========================= */
+
+function tampilkanPeriode(){
+
+let periode =
+ambilPeriode();
+
+if(periode===""){
+  alert("Pilih periode");
+  return;
+}
+
+let allData =
+JSON.parse(
+localStorage.getItem(
+"databaseRekap"
+)
+) || {};
+
+body.innerHTML = "";
+
+if(allData[periode]){
+
+allData[periode]
+.rows
+.forEach((item,index)=>{
+
+body.insertAdjacentHTML(
+"beforeend",
+buatRow(index+1,item)
+);
+
+});
+
+document
+.getElementById("namaUser").value =
+allData[periode].namaUser;
+
+document
+.getElementById("driver").value =
+allData[periode].driver;
+
+}else{
+
+body.insertAdjacentHTML(
+"beforeend",
+buatRow(1)
+);
+
+}
+
+hitungTotal();
+
+}
+
+/* =========================
+   LOAD AWAL
+========================= */
+
+function loadAwal(){
+
+let last =
+localStorage.getItem(
+"lastPeriode"
+);
+
+if(last){
+
+let p = last.split(" ");
+
+document
+.getElementById("bulan").value =
+p[0];
+
+document
+.getElementById("tahun").value =
+p[1];
+
+tampilkanPeriode();
+
+}else{
+
+body.insertAdjacentHTML(
+"beforeend",
+buatRow(1)
+);
+
+}
+
+}
+
+loadAwal();
+
+</script>
+<script>
+
+/* =========================
+   EXPORT PDF
+========================= */
+
+function exportPDF(){
+
+  let rows =
+  document.querySelectorAll(
+  "#tableBody tr"
+  );
+
+  let adaData = false;
+
+  rows.forEach(row=>{
+
+    let inputs =
+    row.querySelectorAll("input");
+
+    for(let i=0;i<inputs.length;i++){
+
+      if(inputs[i].value.trim()!==""){
+        adaData = true;
+        break;
+      }
+
+    }
+
+  });
+
+  if(!adaData){
+    alert("Belum ada data untuk Export PDF");
+    return;
+  }
+
+  let periode =
+  ambilPeriode() ||
+  "Tanpa_Periode";
+
+  const { jsPDF } =
+  window.jspdf;
+
+  let doc =
+  new jsPDF(
+  "p",
+  "mm",
+  "a4"
+  );
+
+  /* HEADER */
+
+  doc.setFont(
+  "helvetica",
+  "bold"
+  );
+
+  doc.setFontSize(11);
+
+  doc.text(
+  "PT TOYOTA ASTRA MOTOR",
+  15,
+  10
+  );
+
+  doc.setFont(
+  "helvetica",
+  "normal"
+  );
+
+  doc.setFontSize(8);
+
+  doc.text(
+  "Human Resource and General Affair Division",
+  15,
+  15
+  );
+
+  doc.text(
+  "General Affair Department",
+  15,
+  19
+  );
+
+  doc.setFont(
+  "helvetica",
+  "bold"
+  );
+
+  doc.setFontSize(15);
+
+  doc.text(
+  "LAPORAN TOLL PARKIR",
+  105,
+  28,
+  {align:"center"}
+  );
+
+  /* IDENTITAS */
+
+  let x = 15;
+  let y = 40;
+  let leftW = 40;
+  let rightW = 60;
+  let h = 8;
+
+  doc.setLineWidth(0.2);
+
+  doc.rect(x,y,leftW,h);
+  doc.rect(x+leftW,y,rightW,h);
+
+  doc.text(
+  "Nama User",
+  x+2,
+  y+5
+  );
+
+  doc.text(
+  document
+  .getElementById(
+  "namaUser"
+  ).value,
+  x+leftW+2,
+  y+5
+  );
+
+  doc.rect(x,y+8,leftW,h);
+  doc.rect(x+leftW,y+8,rightW,h);
+
+  doc.text(
+  "Driver",
+  x+2,
+  y+13
+  );
+
+  doc.text(
+  document
+  .getElementById(
+  "driver"
+  ).value,
+  x+leftW+2,
+  y+13
+  );
+
+  doc.rect(x,y+16,leftW,h);
+  doc.rect(x+leftW,y+16,rightW,h);
+
+  doc.text(
+  "Periode",
+  x+2,
+  y+21
+  );
+
+  doc.text(
+  periode,
+  x+leftW+2,
+  y+21
+  );
+
+  /* DATA TABLE */
+
+  let tableData=[];
+
+  document
+  .querySelectorAll(
+  "#tableBody tr"
+  )
+  .forEach(row=>{
+
+    let inputs =
+    row.querySelectorAll(
+    "input"
+    );
+
+    tableData.push([
+
+      row.cells[0].innerText,
+      inputs[0].value,
+      inputs[1].value,
+      inputs[2].value,
+      inputs[3].value,
+      inputs[4].value,
+      inputs[5].value,
+      inputs[6].value
+
+    ]);
+
+  });
+
+  doc.autoTable({
+
+    startY:70,
+
+    head:[[
+      "No",
+      "Tanggal",
+      "Lokasi Awal",
+      "Tujuan Akhir",
+      "Parkir",
+      "Flazz BCA",
+      "Tunai",
+      "KM"
+    ]],
+
+    body:tableData,
+
+    theme:"grid",
+
+    headStyles:{
+      fillColor:[25,118,210],
+      fontSize:9
+    },
+
+    styles:{
+      fontSize:8,
+      fontStyle:"bold",
+      cellPadding:2
+    }
+
+  });
+
+  /* BOX TOTAL */
+
+  let finalY =
+  doc.lastAutoTable.finalY + 10;
+
+  let totalX = 15;
+  let totalW1 = 40;
+  let totalW2 = 60;
+
+  doc.rect(
+  totalX,
+  finalY,
+  totalW1,
+  8
+  );
+
+  doc.rect(
+  totalX+totalW1,
+  finalY,
+  totalW2,
+  8
+  );
+
+  doc.text(
+  "Total Flazz BCA",
+  totalX+2,
+  finalY+5
+  );
+
+  doc.text(
+  document
+  .getElementById(
+  "totalFlazz"
+  ).value,
+  totalX+totalW1+2,
+  finalY+5
+  );
+
+  doc.rect(
+  totalX,
+  finalY+8,
+  totalW1,
+  8
+  );
+
+  doc.rect(
+  totalX+totalW1,
+  finalY+8,
+  totalW2,
+  8
+  );
+
+  doc.text(
+  "Total Tunai",
+  totalX+2,
+  finalY+13
+  );
+
+  doc.text(
+  document
+  .getElementById(
+  "totalTunai"
+  ).value,
+  totalX+totalW1+2,
+  finalY+13
+  );
+
+  doc.rect(
+  totalX,
+  finalY+16,
+  totalW1,
+  8
+  );
+
+  doc.rect(
+  totalX+totalW1,
+  finalY+16,
+  totalW2,
+  8
+  );
+
+  doc.text(
+  "Sub Total",
+  totalX+2,
+  finalY+21
+  );
+
+  doc.text(
+  document
+  .getElementById(
+  "grandTotal"
+  ).value,
+  totalX+totalW1+2,
+  finalY+21
+  );
+
+  /* SAVE */
+
+  let namaFile =
+  "Rekapan_" +
+  periode.replace(
+  /\s+/g,
+  "_"
+  ) +
+  ".pdf";
+
+  doc.save(
+  namaFile
+  );
+
+}
+
+</script>
+
+</body>
+</html>
