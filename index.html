@@ -232,7 +232,7 @@ select{
 
 <div class="container">
 
-<h2>LAPORAN PENGELUARAN TOLL PARKIR</h2>
+<h2>LAPORAN TOLL PARKIR</h2>
 
 <div class="info-box">
 
@@ -250,8 +250,33 @@ type="text" value="Surki">
 
 <div class="info-row">
 <span class="info-label">Periode</span>
-<input id="periode" class="info-input"
-type="text" placeholder="Contoh: Juni 2026">
+
+<select id="bulan" class="info-input" style="width:120px;">
+<option value="">Bulan</option>
+<option>Januari</option>
+<option>Februari</option>
+<option>Maret</option>
+<option>April</option>
+<option>Mei</option>
+<option>Juni</option>
+<option>Juli</option>
+<option>Agustus</option>
+<option>September</option>
+<option>Oktober</option>
+<option>November</option>
+<option>Desember</option>
+</select>
+
+<select id="tahun" class="info-input" style="width:90px;">
+<option value="">Tahun</option>
+<option>2026</option>
+<option>2027</option>
+<option>2028</option>
+<option>2029</option>
+<option>2030</option>
+<option>2031</option>
+</select>
+
 </div>
 
 <div class="top-buttons">
@@ -300,7 +325,7 @@ Tampilkan
 </div>
 
 <div class="total-row">
-<span class="total-label">Grand Total</span>
+<span class="total-label">Sub Total</span>
 <input id="grandTotal" class="total-input" readonly>
 </div>
 
@@ -317,6 +342,21 @@ Export PDF
 <script>
 
 const body = document.getElementById("tableBody");
+
+function ambilPeriode(){
+
+ let bulan =
+ document.getElementById("bulan").value;
+
+ let tahun =
+ document.getElementById("tahun").value;
+
+ if(bulan==="" || tahun===""){
+   return "";
+ }
+
+ return bulan + " " + tahun;
+}
 
 /* LOAD */
 loadLastData();
@@ -404,7 +444,7 @@ totalTunai += Number(tunai || 0);
 
 });
 
-let grand = totalEmoney + totalTunai;
+let subtotal = totalEmoney + totalTunai;
 
 document.getElementById("totalEmoney").value =
 "Rp. " + totalEmoney.toLocaleString("id-ID");
@@ -413,7 +453,7 @@ document.getElementById("totalTunai").value =
 "Rp. " + totalTunai.toLocaleString("id-ID");
 
 document.getElementById("grandTotal").value =
-"Rp. " + grand.toLocaleString("id-ID");
+"Rp. " + subtotal.toLocaleString("id-ID");
 
 }
 
@@ -439,8 +479,7 @@ let row = el.closest("tr");
 
 if(el.value==="simpan"){
 
-let periode =
-document.getElementById("periode").value;
+let periode = ambilPeriode();
 
 let tanggal =
 row.querySelector('input[type="date"]').value;
@@ -528,113 +567,35 @@ hitungTotal();
 
 });
 
-/* SAVE DATA */
 
-function saveData(){
-
-let periode =
-document.getElementById("periode").value;
-
-let allData =
-JSON.parse(
-localStorage.getItem("databaseRekap")
-) || {};
-
-let rowsData=[];
-
-document.querySelectorAll("#tableBody tr")
-.forEach(row=>{
-
-let inputs =
-row.querySelectorAll("input");
-
-rowsData.push({
-
-tanggal: inputs[0].value,
-awal: inputs[1].value,
-akhir: inputs[2].value,
-parkir: inputs[3].value,
-emoney: inputs[4].value,
-tunai: inputs[5].value,
-km: inputs[6].value
-
-});
-
-});
-
-allData[periode]={
-
-namaUser:
-document.getElementById("namaUser").value,
-
-driver:
-document.getElementById("driver").value,
-
-periode: periode,
-
-rows: rowsData
-
-};
-
-localStorage.setItem(
-"databaseRekap",
-JSON.stringify(allData)
-);
-
-localStorage.setItem(
-"lastPeriode",
-periode
-);
-
-alert("fetch jalan");
-    
-fetch("https://script.google.com/macros/s/AKfycbzu0kACXpRSlKCFrggNgqZyN3RNIVTnLKOkhjuTbBN-2-XlsXIPFOaxkWSs-LrsJRTH7A/exec", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    nama: document.getElementById("namaUser").value,
-    tanggal: rowsData[0]?.tanggal || "",
-    gate: document.getElementById("driver").value,
-    tol: rowsData[0]?.parkir || 0,
-    emoney: rowsData[0]?.emoney || 0,
-    tunai: rowsData[0]?.tunai || 0
-  })
-})
-.then(response => response.text())
-.then(data => {
-   alert("Berhasil: " + data);
-   console.log(data);
-})
-.catch(error => {
-   alert("Error: " + error);
-   console.log(error);
-});    
-    
-}
-
-/* TAMPILKAN */
+/* TAMPILKAM PERIODE */
 
 function tampilkanPeriode(){
 
-let periode =
-document.getElementById("periode").value;
+  let periode = ambilPeriode();
 
-let allData =
-JSON.parse(
-localStorage.getItem("databaseRekap")
-)||{};
+  let allData =
+  JSON.parse(
+    localStorage.getItem("databaseRekap")
+  ) || {};
 
-if(!allData[periode]){
-alert("Data periode tidak ditemukan");
-return;
-}
+  /* Kalau data ada → tampilkan */
+  if(allData[periode]){
+    loadPeriode(allData[periode]);
+    return;
+  }
 
-loadPeriode(allData[periode]);
+  /* Kalau data kosong → reset form */
 
-}
+  body.innerHTML = "";
 
+  tambahBaris();   // buat 1 baris kosong
+
+  document.getElementById("totalEmoney").value = "";
+  document.getElementById("totalTunai").value = "";
+  document.getElementById("grandTotal").value = "";
+
+}  
 /* LOAD */
 
 function loadPeriode(data){
@@ -645,8 +606,10 @@ data.namaUser;
 document.getElementById("driver").value =
 data.driver;
 
-document.getElementById("periode").value =
-data.periode;
+let p = data.periode.split(" ");
+
+document.getElementById("bulan").value = p[0];
+document.getElementById("tahun").value = p[1];
 
 body.innerHTML="";
 
@@ -689,27 +652,78 @@ tambahBaris();
 
 function exportPDF(){
 
-let periode =
-document.getElementById("periode").value || "Tanpa_Periode";
+  let rows =
+  document.querySelectorAll("#tableBody tr");
 
-const { jsPDF } = window.jspdf;
-let doc = new jsPDF("p","mm","a4");
+  let adaData = false;
 
-/* JUDUL */
+  rows.forEach(row => {
 
-doc.setFont("helvetica", "bold");   // font bold
-doc.setFontSize(18);
-doc.setTextColor(0, 0, 0);
+    let inputs = row.querySelectorAll("input");
+
+    // cek apakah minimal satu kolom terisi
+    for(let i = 0; i < inputs.length; i++){
+      if(inputs[i].value.trim() !== ""){
+        adaData = true;
+        break;
+      }
+    }
+
+  });
+
+  // jika semua input kosong
+  if(!adaData){
+    alert("Belum ada data input untuk Export PDF");
+    return;
+  }
+
+  let periode = ambilPeriode() || "Tanpa_Periode";
+
+  const { jsPDF } = window.jspdf;
+  let doc = new jsPDF("p","mm","a4");
+  
+ /* ===== HEADER PDF ===== */
+
+/* Baris 1 */
+doc.setFont("helvetica","bold");
+doc.setFontSize(11);
 
 doc.text(
-  "LAPORAN PENGELUARAN TOLL PARKIR",
-  105,   // tengah halaman A4 (lebar 210)
-  18,
-  { align: "center" }
+"PT TOYOTA ASTRA MOTOR",
+15,
+10
 );
 
-doc.setDrawColor(25, 118, 210);
-doc.line(15, 22, 195, 22);
+/* Baris 2 */
+doc.setFont("helvetica","normal");
+doc.setFontSize(8);
+
+doc.text(
+"Human Resource and General Affair Division",
+15,
+15
+);
+
+/* Baris 3 */
+doc.text(
+"General Affair Department",
+15,
+19
+);
+
+/* Judul di tengah */
+doc.setFont("helvetica","bold");
+doc.setFontSize(15);
+
+doc.text(
+"LAPORAN TOLL PARKIR",
+105,              // tengah halaman
+28,
+{align:"center"}
+);
+
+
+
 
 /* BOX IDENTITAS PDF */
 
@@ -720,7 +734,7 @@ doc.setLineWidth(0.25);
 doc.setDrawColor(204,204,204);
 
 let x = 15;
-let y = 30;
+let y = 40;
 
 let leftW = 40;
 let rightW = 55;
@@ -755,7 +769,7 @@ doc.rect(x + leftW, y + 16, rightW, h);
 
 doc.text("Periode", x + 2, y + 21);
 doc.text(
-document.getElementById("periode").value,
+ambilPeriode(),
 x + leftW + 2,
 y + 21
 );
@@ -806,17 +820,37 @@ body:tableData,
 theme:"grid",
 
 headStyles:{
-fillColor:[25,118,210],
-textColor:[255,255,255],
-fontSize:9
-},
-
-bodyStyles:{
-fontSize:8
+  fillColor:[25,118,210],
+  textColor:[255,255,255],
+  fontSize:9,
+  fontStyle:"bold"
 },
 
 styles:{
-cellPadding:2
+  font:"helvetica",
+  fontSize:8,
+  textColor:[0,0,0],      // paksa hitam
+  fontStyle:"bold",       // paksa tebal
+  cellPadding:2,
+  lineColor:[180,180,180],
+  lineWidth:0.1
+},
+
+columnStyles:{
+  0:{textColor:[0,0,0]},
+  1:{textColor:[0,0,0]},
+  2:{textColor:[0,0,0]},
+  3:{textColor:[0,0,0]},
+  4:{textColor:[0,0,0]},
+  5:{textColor:[0,0,0]},
+  6:{textColor:[0,0,0]},
+  7:{textColor:[0,0,0]}
+},
+
+didDrawCell: function(data){
+  if(data.section === "body"){
+    doc.setTextColor(0,0,0);
+  }
 }
 
 });
@@ -859,7 +893,7 @@ finalY + 13
 doc.rect(totalX, finalY + 16, totalLabelW, totalH);
 doc.rect(totalX + totalLabelW, finalY + 16, totalValueW, totalH);
 
-doc.text("Grand Total", totalX + 2, finalY + 21);
+doc.text("Sub Total", totalX + 2, finalY + 21);
 doc.text(
 document.getElementById("grandTotal").value,
 totalX + totalLabelW + 2,
@@ -880,3 +914,4 @@ doc.save(namaFile);
 </script>
 </body>
 </html>
+ 
