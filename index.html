@@ -600,9 +600,15 @@ fetch("https://script.google.com/macros/s/AKfycbxYPd_wwk6fws_fvrlhF8Q_JHPeZ4ygzA
     tunai: rowsData[0]?.tunai || 0
   })
 })
-.then(response => response.json())
-.then(data => console.log("Berhasil:", data))
-.catch(error => console.log("Error:", error));    
+.then(response => response.text())
+.then(data => {
+   alert("Berhasil: " + data);
+   console.log(data);
+})
+.catch(error => {
+   alert("Error: " + error);
+   console.log(error);
+});    
     
 }
 
