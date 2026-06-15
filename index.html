@@ -586,6 +586,24 @@ localStorage.setItem(
 periode
 );
 
+fetch("https://script.google.com/macros/s/AKfycbxYPd_wwk6fws_fvrlhF8Q_JHPeZ4ygzA6C4LK0HtSrJgEc5QGSosfFkVREja4aLTpNLA/exec", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    nama: document.getElementById("namaUser").value,
+    tanggal: rowsData[0]?.tanggal || "",
+    gate: document.getElementById("driver").value,
+    tol: rowsData[0]?.parkir || 0,
+    emoney: rowsData[0]?.emoney || 0,
+    tunai: rowsData[0]?.tunai || 0
+  })
+})
+.then(response => response.json())
+.then(data => console.log("Berhasil:", data))
+.catch(error => console.log("Error:", error));    
+    
 }
 
 /* TAMPILKAN */
