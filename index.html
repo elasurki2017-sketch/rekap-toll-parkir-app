@@ -880,10 +880,15 @@ doc.text(
 doc.setFontSize(10);
     
   let x = 15;
-  let y = 40;
-  let leftW = 45;
-  let rightW = 65;
-  let h = 8;
+let y = 40;
+let h = 8;
+
+let leftW = 38;
+let rightW = 58;
+
+// dipakai juga untuk total nanti
+window.boxLeft = leftW;
+window.boxRight = rightW;
 
   doc.setLineWidth(0.2);
   doc.setDrawColor(180,180,180);
@@ -1028,8 +1033,8 @@ doc.setFontSize(10);
 let finalY = doc.lastAutoTable.finalY + 10;
 
 let totalX = 15;
-let totalW1 = 45;
-let totalW2 = 65;
+let totalW1 = window.boxLeft;
+let totalW2 = window.boxRight;
 
 /* BARIS 1 */
 doc.rect(totalX, finalY, totalW1, 8);
