@@ -836,128 +836,31 @@ function exportPDF(){
   doc.setDrawColor(180,180,180);
 
 
-  /* ================= IDENTITAS ================= */
-
-  let x = 15;
-  let y = 40;
-  let h = 8;
-
-  let leftW = 45;
-  let rightW = 130;
-
-  doc.setFontSize(10);
-  doc.setFont("helvetica","normal");
-
-  // Nama User
-  doc.rect(x,y,leftW,h);
-  doc.rect(x+leftW,y,rightW,h);
-
-  doc.text("Nama User",x+2,y+5);
-  doc.text(
-    document.getElementById("namaUser").value,
-    x+leftW+2,
-    y+5
-  );
-
-  // Driver
-  doc.rect(x,y+8,leftW,h);
-  doc.rect(x+leftW,y+8,rightW,h);
-
-  doc.text("Driver",x+2,y+13);
-  doc.text(
-    document.getElementById("driver").value,
-    x+leftW+2,
-    y+13
-  );
-
-  // Periode
-  doc.rect(x,y+16,leftW,h);
-  doc.rect(x+leftW,y+16,rightW,h);
-
-  doc.text("Periode",x+2,y+21);
-  doc.text(
-    periode,
-    x+leftW+2,
-    y+21
-  );
-
+// ===== TABEL IDENTITAS =====
+doc.autoTable({
+  startY: 48,
+  margin: { left: 14, right: 14 },   // samakan dengan tabel total
+  tableWidth: 'auto',                // biar hitung proporsional
+  body: [
+    ['Nama User', document.getElementById('namaUser').value],
+    ['Driver', document.getElementById('driver').value],
+    ['Periode', `${bulan} ${tahun}`]
+  ],
+  theme: 'grid',
+  styles: {
+    fontSize: 9,
+    lineWidth: 0.2,
+    lineColor: [180,180,180]
+  },
+  columnStyles: {
+    0: { cellWidth: 45 },      // kolom label
+    1: { cellWidth: 130 }      // kolom isi → total = 175
+  }
+});
 
   /* ================= TABEL ================= */
 
-  let tableData=[];
-
-  document
-  .querySelectorAll("#tableBody tr")
-  .forEach(row=>{
-
-    let inputs = row.querySelectorAll("input");
-
-    tableData.push([
-      row.cells[0].innerText,
-      inputs[0].value,
-      inputs[1].value,
-      inputs[2].value,
-      inputs[3].value,
-      inputs[4].value,
-      inputs[5].value,
-      inputs[6].value
-    ]);
-
-  });
-
-
-  doc.autoTable({
-
-    startY:75,
-
-    head:[[
-      "No",
-      "Tanggal",
-      "Lokasi Awal",
-      "Tujuan Akhir",
-      "Parkir",
-      "Flazz BCA",
-      "Tunai",
-      "KM"
-    ]],
-
-    body:tableData,
-
-    theme:"grid",
-
-    styles:{
-      fontSize:8,
-      cellPadding:2,
-      lineColor:[180,180,180],
-      lineWidth:0.2,
-      overflow:"linebreak"
-    },
-
-    headStyles:{
-      fillColor:[25,118,210],
-      fontSize:8,
-      halign:"center",
-      valign:"middle"
-    },
-
-    columnStyles:{
-      0:{cellWidth:10, halign:"center"},
-      1:{cellWidth:25, halign:"center"},
-      2:{cellWidth:32},
-      3:{cellWidth:32},
-      4:{cellWidth:24},
-      5:{cellWidth:24, halign:"right"},
-      6:{cellWidth:20, halign:"right"},
-      7:{cellWidth:13, halign:"center"}
-    },
-
-    margin:{
-      left:15,
-      right:15
-    }
-
-  });
-
+  
 
   /* ================= TOTAL ================= */
 
