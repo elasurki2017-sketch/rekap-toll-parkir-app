@@ -516,10 +516,23 @@ el.closest("tr");
 
 if(el.value==="simpan"){
 
-saveBaris(row);
+let berhasil = saveBaris(row);
+
+if(berhasil){
+
+  el.innerHTML = `
+  <option value="">Tersimpan</option>
+  <option value="simpan">Simpan</option>
+  <option value="tambah">Tambah</option>
+  <option value="hapus">Hapus</option>
+  `;
+
+  el.value = "";
 
 }
 
+}
+    
 if(el.value==="tambah"){
 
 row.insertAdjacentHTML(
