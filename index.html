@@ -297,7 +297,9 @@ value="${data.km || ''}">
 
 <td>
 <select onchange="aksiBaris(this)">
-<option value="">Pilih</option>
+<option value="">
+${data.status==="tersimpan" ? "Tersimpan" : "Pilih"}
+</option>
 <option value="simpan">Simpan</option>
 <option value="tambah">Tambah</option>
 <option value="hapus">Hapus</option>
@@ -475,15 +477,14 @@ row.querySelectorAll(
 );
 
 let rowData = {
-
-tanggal: inputs[0].value,
-awal: inputs[1].value,
-akhir: inputs[2].value,
-parkir: inputs[3].value,
-flazz: inputs[4].value,
-tunai: inputs[5].value,
-km: inputs[6].value
-
+  tanggal: inputs[0].value,
+  awal: inputs[1].value,
+  akhir: inputs[2].value,
+  parkir: inputs[3].value,
+  flazz: inputs[4].value,
+  tunai: inputs[5].value,
+  km: inputs[6].value,
+  status: "tersimpan"
 };
 
 allData[periode]
@@ -516,20 +517,12 @@ el.closest("tr");
 
 if(el.value==="simpan"){
 
-let berhasil = saveBaris(row);
+  let berhasil = saveBaris(row);
 
-if(berhasil){
-
-  el.innerHTML = `
-  <option value="">Tersimpan</option>
-  <option value="simpan">Simpan</option>
-  <option value="tambah">Tambah</option>
-  <option value="hapus">Hapus</option>
-  `;
-
-  el.value = "";
-
-}
+  if(berhasil){
+    el.options[0].text = "Tersimpan";
+    el.value = "";
+  }
 
 }
     
