@@ -534,6 +534,7 @@ buatRow(0)
 );
 
 updateNomor();
+deteksiPerubahan();
 
 }
 
@@ -549,6 +550,62 @@ el.value="";
 
 }
 
+/* =========================
+   DETEKSI PERUBAHAN
+========================= */
+    
+function deteksiPerubahan(){
+
+  document.querySelectorAll("#tableBody tr").forEach(row => {
+
+    let inputs = row.querySelectorAll("input");
+    let select = row.querySelector("select");
+
+    inputs.forEach(input => {
+
+      // supaya listener tidak dobel
+      if(input.dataset.binded) return;
+      input.dataset.binded = "yes";
+
+      input.addEventListener("input", function(){
+
+        // jika sebelumnya tersimpan, ubah lagi
+        if(select.options[0].text === "Tersimpan"){
+
+          select.options[0].text = "Simpan";
+
+          let periode = ambilPeriode();
+          let no = parseInt(row.cells[0].innerText)-1;
+
+          let allData =
+          JSON.parse(
+            localStorage.getItem("databaseRekap")
+          ) || {};
+
+          if(
+            allData[periode] &&
+            allData[periode].rows[no]
+          ){
+            allData[periode].rows[no].status = "";
+
+            localStorage.setItem(
+              "databaseRekap",
+              JSON.stringify(allData)
+            );
+          }
+
+        }
+
+      });
+
+    });
+
+  });
+
+}
+
+    
+    
 /* =========================
    TAMPILKAN DATA PERIODE
 ========================= */
@@ -603,6 +660,7 @@ buatRow(1)
 }
 
 hitungTotal();
+deteksiPerubahan();
 
 }
 
@@ -638,6 +696,8 @@ body.insertAdjacentHTML(
 buatRow(1)
 );
 
+deteksiPerubahan();
+    
 }
 
 }
