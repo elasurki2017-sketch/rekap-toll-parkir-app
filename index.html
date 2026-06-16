@@ -1015,94 +1015,52 @@ doc.setFontSize(10);
   /* BOX TOTAL */
 
 doc.setFontSize(10);
+
+let finalY = doc.lastAutoTable.finalY + 10;
+
+let totalX = 15;
+let totalW1 = 55;
+let totalW2 = 55;
+
+/* BARIS 1 */
+doc.rect(totalX, finalY, totalW1, 8);
+doc.rect(totalX + totalW1, finalY, totalW2, 8);
+
+doc.text("Total Flazz BCA", totalX + 2, finalY + 5);
+
+doc.text(
+  document.getElementById("totalFlazz").value,
+  totalX + totalW1 + totalW2 - 3,
+  finalY + 5,
+  { align:"right" }
+);
+
+/* BARIS 2 */
+doc.rect(totalX, finalY + 8, totalW1, 8);
+doc.rect(totalX + totalW1, finalY + 8, totalW2, 8);
+
+doc.text("Total Tunai", totalX + 2, finalY + 13);
+
+doc.text(
+  document.getElementById("totalTunai").value,
+  totalX + totalW1 + totalW2 - 3,
+  finalY + 13,
+  { align:"right" }
+);
+
+/* BARIS 3 */
+doc.rect(totalX, finalY + 16, totalW1, 8);
+doc.rect(totalX + totalW1, finalY + 16, totalW2, 8);
+
+doc.text("Sub Total", totalX + 2, finalY + 21);
+
+doc.text(
+  document.getElementById("grandTotal").value,
+  totalX + totalW1 + totalW2 - 3,
+  finalY + 21,
+  { align:"right" }
+);
     
-  let finalY =
-  doc.lastAutoTable.finalY + 10;
-
-  let totalX = 15;
-  let totalW1 = 55;
-  let totalW2 = 55;
-
-  doc.rect(
-  totalX,
-  finalY,
-  totalW1,
-  8
-  );
-
-  doc.rect(
-  totalX+totalW1,
-  finalY,
-  totalW2,
-  8
-  );
-
-  doc.text(
-  "Total Flazz BCA",
-  totalX+2,
-  finalY+5
-  );
-
-  doc.text(
-document.getElementById("totalFlazz").value,
-totalX + totalW1 + totalW2 - 3,
-finalY + 5,
-{align:"right"}
-);
-
-  doc.rect(
-  totalX,
-  finalY+8,
-  totalW1,
-  8
-  );
-
-  doc.rect(
-  totalX+totalW1,
-  finalY+8,
-  totalW2,
-  8
-  );
-
-  doc.text(
-  "Total Tunai",
-  totalX+2,
-  finalY+13
-  );
-
-  doc.text(
-document.getElementById("totalTunai").value,
-totalX+totalW1+2,
-finalY+13,
-{align:"right"}
-);
-
-  doc.rect(
-  totalX,
-  finalY+16,
-  totalW1,
-  8
-  );
-
-  doc.rect(
-  totalX+totalW1,
-  finalY+16,
-  totalW2,
-  8
-  );
-
-  doc.text(
-  "Sub Total",
-  totalX+2,
-  finalY+21
-  );
-
-  doc.text(
-document.getElementById("grandTotal").value,
-totalX + totalW1 + totalW2 - 3,
-finalY + 21,
-{align:"right"}
-);
   /* SAVE */
 
   let namaFile =
