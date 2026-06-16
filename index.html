@@ -968,7 +968,6 @@ doc.setFontSize(10);
   });
 
   doc.autoTable({
-
   startY:75,
 
   head:[[
@@ -983,43 +982,36 @@ doc.setFontSize(10);
   ]],
 
   body:tableData,
-
   theme:"grid",
+
+  styles:{
+    fontSize:8,
+    cellPadding:2,
+    lineColor:[204,204,204],
+    lineWidth:0.2,
+    overflow:"linebreak"
+  },
 
   headStyles:{
     fillColor:[25,118,210],
-    fontSize:10,
-    lineColor:[204,204,204]
-  },
-
-  styles:{
-    fontSize:9,
-    fontStyle:"normal",
-    cellPadding:3,
-    lineColor:[204,204,204],
-    lineWidth:0.2
+    fontSize:8
   },
 
   columnStyles:{
-    5:{halign:"right"},   // Flazz BCA
-    6:{halign:"right"},   // Tunai
-    7:{halign:"right"}    // KM
-  }
+    5:{halign:"right"},
+    6:{halign:"right"},
+    7:{halign:"right"}
+  },
 
-    tableWidth: "auto",
-styles:{
-  fontSize:8,
-  cellPadding:2,
-  overflow:"linebreak"
-},
-margin:{left:10,right:10},
+  margin:{
+    left:10,
+    right:10
+  },
 
-    headStyles:{
-  fillColor:[25,118,210],
-  fontSize:8
-    }
-      
+  tableWidth:"auto"
 });
+
+    
   /* BOX TOTAL */
 
 doc.setFontSize(10);
@@ -1029,7 +1021,7 @@ doc.setFontSize(10);
 
   let totalX = 15;
   let totalW1 = 55;
-  let totalW2 = 80;
+  let totalW2 = 55;
 
   doc.rect(
   totalX,
