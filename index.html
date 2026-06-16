@@ -1044,14 +1044,11 @@ doc.setFontSize(10);
   );
 
   doc.text(
-  document
-  .getElementById(
-  "totalFlazz"
-  ).value,
-  totalX+totalW1+2,
-  finalY+5,
-  {align:"right"}
-  );
+document.getElementById("totalFlazz").value,
+totalX + totalW1 + totalW2 - 3,
+finalY + 5,
+{align:"right"}
+);
 
   doc.rect(
   totalX,
@@ -1074,14 +1071,11 @@ doc.setFontSize(10);
   );
 
   doc.text(
-  document
-  .getElementById(
-  "totalTunai"
-  ).value,
-  totalX+totalW1+2,
-  finalY+13,
-  {align:"right"}
-  );
+document.getElementById("totalTunai").value,
+totalX+totalW1+2,
+finalY+13,
+{align:"right"}
+);
 
   doc.rect(
   totalX,
@@ -1104,15 +1098,11 @@ doc.setFontSize(10);
   );
 
   doc.text(
-  document
-  .getElementById(
-  "grandTotal"
-  ).value,
-  totalX+totalW1+2,
-  finalY+21, 
-  {align:"right"}
-  );
-
+document.getElementById("grandTotal").value,
+totalX + totalW1 + totalW2 - 3,
+finalY + 21,
+{align:"right"}
+);
   /* SAVE */
 
   let namaFile =
