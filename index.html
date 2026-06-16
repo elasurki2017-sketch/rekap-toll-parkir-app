@@ -970,9 +970,9 @@ doc.setFontSize(10);
   });
 
   doc.autoTable({
-  startY:75,
+  startY: 75,
 
-  head:[[
+  head: [[
     "No",
     "Tanggal",
     "Lokasi Awal",
@@ -983,37 +983,43 @@ doc.setFontSize(10);
     "KM"
   ]],
 
-  body:tableData,
-  theme:"grid",
+  body: tableData,
+  theme: "grid",
 
-  styles:{
-    fontSize:8,
-    cellPadding:2,
-    lineColor:[204,204,204],
-    lineWidth:0.2,
-    overflow:"linebreak"
+  styles: {
+    fontSize: 8,
+    cellPadding: 2,
+    lineColor: [204,204,204],
+    lineWidth: 0.2,
+    overflow: "linebreak"
   },
 
-  headStyles:{
-  fillColor:[25,118,210],
-  fontSize:8,
-  halign:"center",
-  valign:"middle"
-},
-      
-  columnStyles:{
-    5:{halign:"right"},
-    6:{halign:"right"},
-    7:{halign:"right"}
+  headStyles: {
+    fillColor: [25,118,210],
+    fontSize: 8,
+    halign: "center",
+    valign: "middle"
   },
 
-  margin:{
-  left:15
-},
+  // INI YANG MENGATUR LEBAR
+  columnStyles: {
+    0: { cellWidth: 10, halign: "center" },   // No
+    1: { cellWidth: 24, halign: "center" },   // Tanggal
+    2: { cellWidth: 30 },                     // Lokasi Awal
+    3: { cellWidth: 30 },                     // Tujuan Akhir
+    4: { cellWidth: 22 },                     // Parkir
+    5: { cellWidth: 24, halign: "right" },   // Flazz
+    6: { cellWidth: 18, halign: "right" },   // Tunai
+    7: { cellWidth: 12, halign: "center" }   // KM
+  },
 
-tableWidth:110
+  margin: {
+    left: 15,
+    right: 15
+  }
+
+  // HAPUS tableWidth:110
 });
-
     
   /* BOX TOTAL */
 
