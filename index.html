@@ -540,9 +540,58 @@ deteksiPerubahan();
 
 if(el.value==="hapus"){
 
-row.remove();
+  let periode = ambilPeriode();
 
-updateNomor();
+  let no =
+  parseInt(
+    row.cells[0].innerText
+  ) - 1;
+
+  // hapus dari localStorage
+  let allData =
+  JSON.parse(
+    localStorage.getItem(
+      "databaseRekap"
+    )
+  ) || {};
+
+  if(
+    allData[periode] &&
+    allData[periode].rows
+  ){
+
+    // hapus data index baris
+    allData[periode]
+    .rows
+    .splice(no,1);
+
+    localStorage.setItem(
+      "databaseRekap",
+      JSON.stringify(allData)
+    );
+
+  }
+
+  // hapus row html
+  row.remove();
+
+  updateNomor();
+
+  // kalau kosong semua, buat 1 row baru
+  if(
+    document.querySelectorAll(
+      "#tableBody tr"
+    ).length===0
+  ){
+
+    body.insertAdjacentHTML(
+      "beforeend",
+      buatRow(1)
+    );
+
+    deteksiPerubahan();
+
+  }
 
 }
 
