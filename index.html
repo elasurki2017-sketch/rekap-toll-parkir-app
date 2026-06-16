@@ -69,6 +69,10 @@ h2{
     font-size:12px;
 }
 
+.total-input{
+    text-align:right;
+}
+
 .top-btn,.pdf-btn{
     background:#1976d2;
     color:white;
@@ -125,6 +129,7 @@ input[type="number"]{
 
 .rupiah{
     width:90px;
+    text-align:right;
 }
 
 .textbox{
@@ -991,8 +996,14 @@ doc.setFontSize(10);
     fontSize:9,
     fontStyle:"normal",
     cellPadding:3,
-    lineColor:[204,204,204],   // warna border
-    lineWidth:0.2             // tipis seperti input
+    lineColor:[204,204,204],
+    lineWidth:0.2
+  },
+
+  columnStyles:{
+    5:{halign:"right"},   // Flazz BCA
+    6:{halign:"right"},   // Tunai
+    7:{halign:"right"}    // KM
   }
 
 });
@@ -1034,6 +1045,7 @@ doc.setFontSize(10);
   ).value,
   totalX+totalW1+2,
   finalY+5
+  {align:"right"}
   );
 
   doc.rect(
@@ -1063,6 +1075,7 @@ doc.setFontSize(10);
   ).value,
   totalX+totalW1+2,
   finalY+13
+  {align:"right"}
   );
 
   doc.rect(
@@ -1092,6 +1105,7 @@ doc.setFontSize(10);
   ).value,
   totalX+totalW1+2,
   finalY+21
+  {align:"right"}
   );
 
   /* SAVE */
