@@ -811,7 +811,7 @@ doc.setFont(
   "bold"
 );
 
-doc.setFontSize(9);
+doc.setFontSize(11);
 
 doc.text(
   "PT TOYOTA ASTRA MOTOR",
@@ -824,7 +824,7 @@ doc.setFont(
   "normal"
 );
 
-doc.setFontSize(6);
+doc.setFontSize(8);
 
 doc.text(
   "Human Resource and General Affair Division",
@@ -843,7 +843,7 @@ doc.setFont(
   "bold"
 );
 
-doc.setFontSize(14);
+doc.setFontSize(16);
 
 doc.text(
   "LAPORAN TOLL PARKIR",
@@ -854,7 +854,7 @@ doc.text(
 
   /* IDENTITAS */
 
-doc.setFontSize(8);
+doc.setFontSize(10);
     
   let x = 15;
   let y = 40;
@@ -947,7 +947,7 @@ doc.setFontSize(8);
 
   doc.autoTable({
 
-    startY:70,
+    startY:75,
 
     head:[[
       "No",
@@ -966,20 +966,20 @@ doc.setFontSize(8);
 
     headStyles:{
       fillColor:[25,118,210],
-      fontSize:9
+      fontSize:10
     },
 
     styles:{
-      fontSize:8,
-      fontStyle:"bold",
-      cellPadding:2
-    }
+  fontSize:9,
+  fontStyle:"normal",
+  cellPadding:3
+}
 
   });
 
   /* BOX TOTAL */
 
-doc.setFontSize(8);
+doc.setFontSize(10);
     
   let finalY =
   doc.lastAutoTable.finalY + 10;
