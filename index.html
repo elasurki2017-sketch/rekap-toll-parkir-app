@@ -157,14 +157,14 @@ input[type="number"]{
 <option>Desember</option>
 </select>
 
-<select id="tahun" class="info-input" style="width:90px;">
-<option value="">Tahun</option>
-<option>2026</option>
-<option>2027</option>
-<option>2028</option>
-<option>2029</option>
-<option>2030</option>
-</select>
+<input 
+  type="text"
+  id="tahun"
+  class="info-input"
+  style="width:90px;"
+  placeholder="Tahun"
+  maxlength="4"
+  oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 
 <button class="top-btn" onclick="tampilkanPeriode()">Tampilkan</button>
 
