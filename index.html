@@ -957,36 +957,38 @@ doc.setFontSize(10);
 
   doc.autoTable({
 
-    startY:75,
+  startY:75,
 
-    head:[[
-      "No",
-      "Tanggal",
-      "Lokasi Awal",
-      "Tujuan Akhir",
-      "Parkir",
-      "Flazz BCA",
-      "Tunai",
-      "KM"
-    ]],
+  head:[[
+    "No",
+    "Tanggal",
+    "Lokasi Awal",
+    "Tujuan Akhir",
+    "Parkir",
+    "Flazz BCA",
+    "Tunai",
+    "KM"
+  ]],
 
-    body:tableData,
+  body:tableData,
 
-    theme:"grid",
+  theme:"grid",
 
-    headStyles:{
-      fillColor:[25,118,210],
-      fontSize:10
-    },
+  headStyles:{
+    fillColor:[25,118,210],
+    fontSize:10,
+    lineColor:[204,204,204]
+  },
 
-    styles:{
-  fontSize:9,
-  fontStyle:"normal",
-  cellPadding:3
-}
+  styles:{
+    fontSize:9,
+    fontStyle:"normal",
+    cellPadding:3,
+    lineColor:[204,204,204],   // warna border
+    lineWidth:0.2             // tipis seperti input
+  }
 
-  });
-
+});
   /* BOX TOTAL */
 
 doc.setFontSize(10);
