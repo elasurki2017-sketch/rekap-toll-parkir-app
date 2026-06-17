@@ -858,7 +858,59 @@ doc.autoTable({
   }
 });
 
-  /* ================= TABEL ================= */
+/* ================= TABEL DATA ================= */
+
+let tableData = [];
+
+document
+.querySelectorAll("#tableBody tr")
+.forEach(row => {
+
+  let inputs = row.querySelectorAll("input");
+
+  tableData.push([
+    row.cells[0].innerText,   // No
+    inputs[0].value,         // Tanggal
+    inputs[1].value,         // Lokasi Awal
+    inputs[2].value,         // Tujuan Akhir
+    inputs[3].value,         // Parkir
+    inputs[4].value,         // Flazz
+    inputs[5].value,         // Tunai
+    inputs[6].value          // KM
+  ]);
+
+});
+
+doc.autoTable({
+
+  startY: doc.lastAutoTable.finalY + 8,
+
+  head: [[
+    "No",
+    "Tanggal",
+    "Lokasi Awal",
+    "Tujuan",
+    "Parkir",
+    "Flazz BCA",
+    "Tunai",
+    "KM"
+  ]],
+
+  body: tableData,
+
+  theme: "grid",
+
+  styles: {
+    fontSize: 8,
+    lineWidth: 0.2,
+    lineColor: [180,180,180]
+  },
+
+  headStyles: {
+    fontSize: 8
+  }
+
+});
 
   
 
