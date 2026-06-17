@@ -845,25 +845,22 @@ function exportPDF(){
 
   /* ================= IDENTITAS ================= */
 
-  doc.autoTable({
-    startY: 48,
-    margin:{ left:15, right:15 },
-    body:[
-      ['Nama User', document.getElementById('namaUser').value],
-      ['Driver', document.getElementById('driver').value],
-      ['Periode', `${bulan} ${tahun}`]
-    ],
-    theme:'grid',
-    styles:{
-      fontSize:9,
-      lineWidth:0.2,
-      lineColor:[180,180,180]
-    },
-    columnStyles:{
-  0:{cellWidth:15},
-  1:{cellWidth:15}
-}
-  });
+ doc.autoTable({
+  startY:48,
+  body:[
+    ['Nama User', document.getElementById('namaUser').value],
+    ['Driver', document.getElementById('driver').value],
+    ['Periode', `${bulan} ${tahun}`]
+  ],
+  theme:'grid',
+  styles:{
+    fontSize:9
+  },
+  columnStyles:{
+    0:{cellWidth:40},
+    1:{cellWidth:'wrap'}
+  }
+});
 
 
   /* ================= TABEL DATA ================= */
