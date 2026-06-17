@@ -845,20 +845,41 @@ function exportPDF(){
 
   /* ================= IDENTITAS ================= */
 
- doc.autoTable({
+ // isi data
+let namaUser = document.getElementById('namaUser').value;
+let driver = document.getElementById('driver').value;
+let periodeText = `${bulan} ${tahun}`;
+
+// hitung teks terpanjang kolom kiri
+let kiriTerpanjang = ["Nama User","Driver","Periode"]
+  .reduce((a,b)=> a.length > b.length ? a : b);
+
+// hitung teks terpanjang kolom kanan
+let kananTerpanjang = [namaUser,driver,periodeText]
+  .reduce((a,b)=> a.length > b.length ? a : b);
+
+// lebar otomatis
+let lebarKolom1 = doc.getTextWidth(kiriTerpanjang) + 8;
+let lebarKolom2 = doc.getTextWidth(kananTerpanjang) + 8;
+
+// batasi supaya tidak terlalu lebar
+if(lebarKolom2 > 120) lebarKolom2 = 120;
+
+doc.autoTable({
   startY:48,
   body:[
-    ['Nama User', document.getElementById('namaUser').value],
-    ['Driver', document.getElementById('driver').value],
-    ['Periode', `${bulan} ${tahun}`]
+    ['Nama User', namaUser],
+    ['Driver', driver],
+    ['Periode', periodeText]
   ],
   theme:'grid',
   styles:{
-    fontSize:9
+    fontSize:9,
+    cellPadding:2
   },
   columnStyles:{
-    0:{cellWidth:60},
-    1:{cellWidth:'wrap'}
+    0:{ cellWidth: lebarKolom1 },
+    1:{ cellWidth: lebarKolom2 }
   }
 });
 
