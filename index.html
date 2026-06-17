@@ -952,55 +952,67 @@ doc.autoTable({
 
   /* ================= TOTAL ================= */
 
-  doc.setFontSize(9);
+doc.setFontSize(9);
 
-  let finalY = doc.lastAutoTable.finalY + 10;
+let finalY = doc.lastAutoTable.finalY + 10;
 
-  let totalX = 15;
-  let totalW1 = col1;
-  let totalW2 = col2;
+// ambil isi total
+let totalFlazz = document.getElementById("totalFlazz").value;
+let totalTunai = document.getElementById("totalTunai").value;
+let grandTotal = document.getElementById("grandTotal").value;
 
+// cari label terpanjang kiri
+let kiriTerpanjang = ["Total Flazz BCA","Total Tunai","Sub Total"]
+  .reduce((a,b)=> a.length > b.length ? a : b);
 
-  // Total Flazz
-  doc.rect(totalX,finalY,totalW1,8);
-  doc.rect(totalX+totalW1,finalY,totalW2,8);
+// cari nilai terpanjang kanan
+let kananTerpanjang = [totalFlazz,totalTunai,grandTotal]
+  .reduce((a,b)=> a.length > b.length ? a : b);
 
-  doc.text("Total Flazz BCA",totalX+2,finalY+5.5);
+// hitung lebar otomatis
+let totalW1 = doc.getTextWidth(kiriTerpanjang) + 8;
+let totalW2 = doc.getTextWidth(kananTerpanjang) + 12;
 
-  doc.text(
-    document.getElementById("totalFlazz").value,
-    totalX+totalW1+totalW2-4,
-    finalY+5.5,
-    {align:"right"}
-  );
+// batas maksimal
+if(totalW2 > 120) totalW2 = 120;
 
-
-  // Total Tunai
-  doc.rect(totalX,finalY+8,totalW1,8);
-  doc.rect(totalX+totalW1,finalY+8,totalW2,8);
-
-  doc.text("Total Tunai",totalX+2,finalY+13.5);
-
-  doc.text(
-    document.getElementById("totalTunai").value,
-    totalX+totalW1+totalW2-4,
-    finalY+13.5,
-    {align:"right"}
-  );
+let totalX = 15;
 
 
-  // Sub Total
-  doc.rect(totalX,finalY+16,totalW1,8);
-  doc.rect(totalX+totalW1,finalY+16,totalW2,8);
+// Total Flazz
+doc.rect(totalX, finalY, totalW1, 8);
+doc.rect(totalX + totalW1, finalY, totalW2, 8);
 
-  doc.text("Sub Total",totalX+2,finalY+21.5);
+doc.text("Total Flazz BCA", totalX + 2, finalY + 5.5);
+doc.text(totalFlazz,
+  totalX + totalW1 + totalW2 - 3,
+  finalY + 5.5,
+  {align:"right"}
+);
 
-  doc.text(
-    document.getElementById("grandTotal").value,
-    totalX+totalW1+totalW2-4,
-    finalY+21.5,
-    {align:"right"}
-  );
+
+// Total Tunai
+doc.rect(totalX, finalY + 8, totalW1, 8);
+doc.rect(totalX + totalW1, finalY + 8, totalW2, 8);
+
+doc.text("Total Tunai", totalX + 2, finalY + 13.5);
+doc.text(totalTunai,
+  totalX + totalW1 + totalW2 - 3,
+  finalY + 13.5,
+  {align:"right"}
+);
+
+
+// Sub Total
+doc.rect(totalX, finalY + 16, totalW1, 8);
+doc.rect(totalX + totalW1, finalY + 16, totalW2, 8);
+
+doc.text("Sub Total", totalX + 2, finalY + 21.5);
+doc.text(grandTotal,
+  totalX + totalW1 + totalW2 - 3,
+  finalY + 21.5,
+  {align:"right"}
+);
 
 
   /* ================= SAVE ================= */
