@@ -6,138 +6,135 @@
 
 <title>Rekapan Pembayaran Toll Parkir</title>
 
-<!-- PDF Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
 <style>
 
 body{
-    font-family:Arial,sans-serif;
-    margin:10px;
-    background:#f5f5f5;
+font-family:Arial,sans-serif;
+margin:10px;
+background:#f5f5f5;
 }
 
 .container{
-    background:#fff;
-    padding:12px;
-    border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,.10);
+background:#fff;
+padding:12px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,.10);
 }
 
 h2{
-    text-align:center;
-    font-size:20px;
-    margin-bottom:15px;
+text-align:center;
+font-size:20px;
+margin-bottom:15px;
 }
 
 .info-box{
-    border:1px solid #999;
-    padding:10px;
-    border-radius:8px;
-    margin-bottom:15px;
-    background:#fafafa;
+border:1px solid #999;
+padding:10px;
+border-radius:8px;
+margin-bottom:15px;
+background:#fafafa;
 }
 
 .total-box{
-    border:1px solid #999;
-    padding:10px;
-    border-radius:8px;
-    margin-top:20px;   /* jarak dari tabel */
-    margin-bottom:15px;
-    background:#fafafa;
+border:1px solid #999;
+padding:10px;
+border-radius:8px;
+margin-top:20px;
+margin-bottom:15px;
+background:#fafafa;
 }
 
 .info-row,.total-row{
-    display:flex;
-    align-items:center;
-    margin:6px 0;
-    gap:8px;
+display:flex;
+align-items:center;
+margin:6px 0;
+gap:8px;
 }
 
 .info-label,.total-label{
-    width:110px;
-    font-size:12px;
+width:110px;
+font-size:12px;
 }
 
 .info-input,.total-input{
-    width:220px;
-    padding:6px;
-    border:1px solid #ccc;
-    border-radius:5px;
-    box-sizing:border-box;
-    font-size:12px;
+width:220px;
+padding:6px;
+border:1px solid #ccc;
+border-radius:5px;
+box-sizing:border-box;
+font-size:12px;
 }
 
 .total-input{
-    text-align:right;
+text-align:right;
 }
 
 .top-btn,.pdf-btn{
-    background:#1976d2;
-    color:white;
-    border:none;
-    padding:7px 12px;
-    border-radius:5px;
-    cursor:pointer;
-    font-size:12px;
+background:#1976d2;
+color:white;
+border:none;
+padding:7px 12px;
+border-radius:5px;
+cursor:pointer;
+font-size:12px;
 }
 
 .export-box{
-    margin-top:10px;
-    display:flex;
-    justify-content:flex-end;
+margin-top:10px;
+display:flex;
+justify-content:flex-end;
 }
-    
+
 .table-wrap{
-    overflow-x:auto;
+overflow-x:auto;
 }
 
 table{
-    width:100%;
-    min-width:950px;
-    border-collapse:collapse;
+width:100%;
+min-width:950px;
+border-collapse:collapse;
 }
 
 th,td{
-    border:1px solid #ddd;
-    text-align:center;
-    padding:5px;
-    font-size:12px;
+border:1px solid #ddd;
+text-align:center;
+padding:5px;
+font-size:12px;
 }
 
 th{
-    background:#1976d2;
-    color:white;
+background:#1976d2;
+color:white;
 }
 
 input,select{
-    padding:6px;
-    border:1px solid #ccc;
-    border-radius:5px;
-    box-sizing:border-box;
-    font-size:12px;
+padding:6px;
+border:1px solid #ccc;
+border-radius:5px;
+box-sizing:border-box;
+font-size:12px;
 }
 
 input[type="date"]{
-    width:120px;
+width:120px;
 }
 
 input[type="number"]{
-    width:60px;
+width:60px;
 }
 
 .rupiah{
-    width:90px;
-    text-align:right;
+width:90px;
+text-align:right;
 }
 
 .textbox{
-    width:100px;
+width:100px;
 }
 
-
-    
 </style>
 </head>
 
@@ -179,14 +176,14 @@ input[type="number"]{
 <option>Desember</option>
 </select>
 
-<input 
-  type="text"
-  id="tahun"
-  class="info-input"
-  style="width:90px;"
-  placeholder="Tahun"
-  maxlength="4"
-  oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+<input
+type="text"
+id="tahun"
+class="info-input"
+style="width:90px;"
+placeholder="Tahun"
+maxlength="4"
+oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 
 <button class="top-btn" onclick="tampilkanPeriode()">Tampilkan</button>
 
@@ -238,15 +235,19 @@ input[type="number"]{
 
 </div>
 
-<!-- PINDAH KE SINI -->
 <div class="export-box">
 <button class="pdf-btn" onclick="exportPDF()">Export PDF</button>
 </div>
 
 </div>
+
 <script>
 
-const body = document.getElementById("tableBody");
+const body =
+document.getElementById("tableBody");
+
+</script>
+<script>
 
 /* =========================
    PERIODE
@@ -254,18 +255,19 @@ const body = document.getElementById("tableBody");
 
 function ambilPeriode(){
 
-  let bulan =
-  document.getElementById("bulan").value;
+let bulan =
+document.getElementById("bulan").value;
 
-  let tahun =
-  document.getElementById("tahun").value;
+let tahun =
+document.getElementById("tahun").value;
 
-  if(bulan==="" || tahun===""){
-    return "";
-  }
-
-  return bulan + " " + tahun;
+if(bulan==="" || tahun===""){
+return "";
 }
+
+return bulan + " " + tahun;
+}
+
 
 /* =========================
    TEMPLATE ROW
@@ -333,6 +335,7 @@ ${data.status==="tersimpan" ? "Tersimpan" : "Pilih"}
 `;
 }
 
+
 /* =========================
    FORMAT RUPIAH
 ========================= */
@@ -347,7 +350,9 @@ if(number==="") return "";
 return "Rp. " +
 Number(number)
 .toLocaleString("id-ID");
+
 }
+
 
 /* =========================
    HITUNG TOTAL
@@ -365,12 +370,13 @@ document
 let inputs =
 row.querySelectorAll("input");
 
+/* index aman */
 let flazz =
-inputs[4].value
+(inputs[4]?.value || "")
 .replace(/[^0-9]/g,'');
 
 let tunai =
-inputs[5].value
+(inputs[5]?.value || "")
 .replace(/[^0-9]/g,'');
 
 totalFlazz += Number(flazz || 0);
@@ -398,6 +404,7 @@ subtotal.toLocaleString("id-ID");
 
 }
 
+
 /* =========================
    INPUT EVENT
 ========================= */
@@ -409,14 +416,15 @@ function(e){
 if(
 e.target.classList.contains("rupiah")
 ){
-  e.target.value =
-  formatRupiah(e.target.value);
+e.target.value =
+formatRupiah(e.target.value);
 }
 
 hitungTotal();
 
 }
 );
+
 
 /* =========================
    UPDATE NOMOR
@@ -438,6 +446,7 @@ index + 1;
 
 }
 
+
 /* =========================
    SAVE SATU BARIS
 ========================= */
@@ -448,8 +457,8 @@ let periode =
 ambilPeriode();
 
 if(periode===""){
-  alert("Periode wajib diisi");
-  return false;
+alert("Periode wajib diisi");
+return false;
 }
 
 let tanggal =
@@ -458,8 +467,8 @@ row.querySelector(
 ).value;
 
 if(tanggal===""){
-  alert("Tanggal wajib diisi");
-  return false;
+alert("Tanggal wajib diisi");
+return false;
 }
 
 let no =
@@ -500,14 +509,14 @@ row.querySelectorAll(
 );
 
 let rowData = {
-  tanggal: inputs[0].value,
-  awal: inputs[1].value,
-  akhir: inputs[2].value,
-  parkir: inputs[3].value,
-  flazz: inputs[4].value,
-  tunai: inputs[5].value,
-  km: inputs[6].value,
-  status: "tersimpan"
+tanggal: inputs[0].value,
+awal: inputs[1].value,
+akhir: inputs[2].value,
+parkir: inputs[3].value,
+flazz: inputs[4].value,
+tunai: inputs[5].value,
+km: inputs[6].value,
+status: "tersimpan"
 };
 
 allData[periode]
@@ -529,6 +538,7 @@ return true;
 
 }
 
+
 /* =========================
    AKSI BARIS
 ========================= */
@@ -540,15 +550,18 @@ el.closest("tr");
 
 if(el.value==="simpan"){
 
-  let berhasil = saveBaris(row);
+let berhasil =
+saveBaris(row);
 
-  if(berhasil){
-    el.options[0].text = "Tersimpan";
-    el.value = "";
-  }
+if(berhasil){
+el.options[0].text =
+"Tersimpan";
+el.value = "";
+}
 
 }
-    
+
+
 if(el.value==="tambah"){
 
 row.insertAdjacentHTML(
@@ -561,60 +574,58 @@ deteksiPerubahan();
 
 }
 
+
 if(el.value==="hapus"){
 
-  let periode = ambilPeriode();
+let periode =
+ambilPeriode();
 
-  let no =
-  parseInt(
-    row.cells[0].innerText
-  ) - 1;
+let no =
+parseInt(
+row.cells[0].innerText
+) - 1;
 
-  // hapus dari localStorage
-  let allData =
-  JSON.parse(
-    localStorage.getItem(
-      "databaseRekap"
-    )
-  ) || {};
+let allData =
+JSON.parse(
+localStorage.getItem(
+"databaseRekap"
+)
+) || {};
 
-  if(
-    allData[periode] &&
-    allData[periode].rows
-  ){
+if(
+allData[periode] &&
+allData[periode].rows
+){
 
-    // hapus data index baris
-    allData[periode]
-    .rows
-    .splice(no,1);
+allData[periode]
+.rows
+.splice(no,1);
 
-    localStorage.setItem(
-      "databaseRekap",
-      JSON.stringify(allData)
-    );
+localStorage.setItem(
+"databaseRekap",
+JSON.stringify(allData)
+);
 
-  }
+}
 
-  // hapus row html
-  row.remove();
+row.remove();
 
-  updateNomor();
+updateNomor();
 
-  // kalau kosong semua, buat 1 row baru
-  if(
-    document.querySelectorAll(
-      "#tableBody tr"
-    ).length===0
-  ){
+if(
+document.querySelectorAll(
+"#tableBody tr"
+).length===0
+){
 
-    body.insertAdjacentHTML(
-      "beforeend",
-      buatRow(1)
-    );
+body.insertAdjacentHTML(
+"beforeend",
+buatRow(1)
+);
 
-    deteksiPerubahan();
+deteksiPerubahan();
 
-  }
+}
 
 }
 
@@ -622,64 +633,89 @@ el.value="";
 
 }
 
+
 /* =========================
    DETEKSI PERUBAHAN
 ========================= */
-    
+
 function deteksiPerubahan(){
 
-  document.querySelectorAll("#tableBody tr").forEach(row => {
+document
+.querySelectorAll(
+"#tableBody tr"
+)
+.forEach(row => {
 
-    let inputs = row.querySelectorAll("input");
-    let select = row.querySelector("select");
+let inputs =
+row.querySelectorAll("input");
 
-    inputs.forEach(input => {
+let select =
+row.querySelector("select");
 
-      // supaya listener tidak dobel
-      if(input.dataset.binded) return;
-      input.dataset.binded = "yes";
+inputs.forEach(input => {
 
-      input.addEventListener("input", function(){
+if(input.dataset.binded)
+return;
 
-        // jika sebelumnya tersimpan, ubah lagi
-        if(select.options[0].text === "Tersimpan"){
+input.dataset.binded =
+"yes";
 
-          select.options[0].text = "Simpan";
+input.addEventListener(
+"input",
+function(){
 
-          let periode = ambilPeriode();
-          let no = parseInt(row.cells[0].innerText)-1;
+if(
+select.options[0].text
+=== "Tersimpan"
+){
 
-          let allData =
-          JSON.parse(
-            localStorage.getItem("databaseRekap")
-          ) || {};
+select.options[0].text =
+"Simpan";
 
-          if(
-            allData[periode] &&
-            allData[periode].rows[no]
-          ){
-            allData[periode].rows[no].status = "";
+let periode =
+ambilPeriode();
 
-            localStorage.setItem(
-              "databaseRekap",
-              JSON.stringify(allData)
-            );
-          }
+let no =
+parseInt(
+row.cells[0].innerText
+)-1;
 
-        }
+let allData =
+JSON.parse(
+localStorage.getItem(
+"databaseRekap"
+)
+) || {};
 
-      });
+if(
+allData[periode] &&
+allData[periode].rows[no]
+){
 
-    });
+allData[periode]
+.rows[no]
+.status = "";
 
-  });
+localStorage.setItem(
+"databaseRekap",
+JSON.stringify(allData)
+);
 
 }
 
-    
-    
+}
+
+});
+
+});
+
+});
+
+}
+
+
 /* =========================
-   TAMPILKAN DATA PERIODE
+   TAMPILKAN PERIODE
 ========================= */
 
 function tampilkanPeriode(){
@@ -688,8 +724,8 @@ let periode =
 ambilPeriode();
 
 if(periode===""){
-  alert("Pilih periode");
-  return;
+alert("Pilih periode");
+return;
 }
 
 let allData =
@@ -715,11 +751,13 @@ buatRow(index+1,item)
 });
 
 document
-.getElementById("namaUser").value =
+.getElementById("namaUser")
+.value =
 allData[periode].namaUser;
 
 document
-.getElementById("driver").value =
+.getElementById("driver")
+.value =
 allData[periode].driver;
 
 }else{
@@ -736,6 +774,7 @@ deteksiPerubahan();
 
 }
 
+
 /* =========================
    LOAD AWAL
 ========================= */
@@ -749,15 +788,16 @@ localStorage.getItem(
 
 if(last){
 
-let p = last.split(" ");
+let p =
+last.split(" ");
 
 document
-.getElementById("bulan").value =
-p[0];
+.getElementById("bulan")
+.value = p[0];
 
 document
-.getElementById("tahun").value =
-p[1];
+.getElementById("tahun")
+.value = p[1];
 
 tampilkanPeriode();
 
@@ -769,262 +809,423 @@ buatRow(1)
 );
 
 deteksiPerubahan();
-    
+
 }
 
 }
 
 loadAwal();
 
-</script>
-<script>
+    </script>
+    <script>
 
 /* =========================
-   EXPORT PDF
+   EXPORT PDF FINAL FIX
 ========================= */
-
 
 function exportPDF(){
 
-  let rows = document.querySelectorAll("#tableBody tr");
-  let adaData = false;
+try{
 
-  rows.forEach(row=>{
-    let inputs = row.querySelectorAll("input");
-    for(let i=0;i<inputs.length;i++){
-      if(inputs[i].value.trim()!==""){
-        adaData = true;
-        break;
-      }
-    }
-  });
+let rows =
+document.querySelectorAll(
+"#tableBody tr"
+);
 
-  if(!adaData){
-    alert("Belum ada data untuk Export PDF");
-    return;
-  }
+let adaData = false;
 
-  const { jsPDF } = window.jspdf;
-  let doc = new jsPDF("p","mm","a4");
+rows.forEach(row=>{
 
-  // ukuran kolom standar (atas & bawah sama)
-  let col1 = 45;
-  let col2 = 130;
+let inputs =
+row.querySelectorAll("input");
 
-  let bulan = document.getElementById("bulan").value;
-  let tahun = document.getElementById("tahun").value;
-  let periode = (bulan && tahun)
-  ? bulan + " " + tahun
-  : "-";
+for(let i=0;i<inputs.length;i++){
 
+if(inputs[i].value.trim()!==""){
 
-  /* ================= HEADER ================= */
+adaData = true;
+break;
 
-  doc.setFont("helvetica","bold");
-  doc.setFontSize(11);
-  doc.text("PT TOYOTA ASTRA MOTOR",15,10);
+}
 
-  doc.setFont("helvetica","normal");
-  doc.setFontSize(8);
-  doc.text("Human Resource and General Affair Division",15,15);
-  doc.text("General Affair Department",15,19);
+}
 
-  doc.setFont("helvetica","bold");
-  doc.setFontSize(16);
-  doc.text("LAPORAN TOLL PARKIR",105,28,{align:"center"});
+});
 
-  // garis bawah judul
-  doc.line(62,30,148,30);
+if(!adaData){
+
+alert("Belum ada data untuk Export PDF");
+return;
+
+}
 
 
-  /* ================= STYLE ================= */
+/* cek jspdf */
 
-  doc.setLineWidth(0.2);
-  doc.setDrawColor(180,180,180);
+if(!window.jspdf){
+
+alert("Library jsPDF gagal dimuat");
+return;
+
+}
 
 
-  /* ================= IDENTITAS ================= */
+const { jsPDF } =
+window.jspdf;
 
- // isi data
-let namaUser = document.getElementById('namaUser').value;
-let driver = document.getElementById('driver').value;
-let periodeText = `${bulan} ${tahun}`;
+let doc =
+new jsPDF("p","mm","a4");
 
-// hitung teks terpanjang kolom kiri
-let kiriTerpanjang = ["Nama User","Driver","Periode"]
-  .reduce((a,b)=> a.length > b.length ? a : b);
 
-// hitung teks terpanjang kolom kanan
-let kananTerpanjang = [namaUser,driver,periodeText]
-  .reduce((a,b)=> a.length > b.length ? a : b);
+/* ================= HEADER ================= */
 
-// lebar otomatis
-let lebarKolom1 = doc.getTextWidth(kiriTerpanjang) + 8;
-let lebarKolom2 = doc.getTextWidth(kananTerpanjang) + 8;
+doc.setFont("helvetica","bold");
+doc.setFontSize(11);
+doc.text(
+"PT TOYOTA ASTRA MOTOR",
+15,
+10
+);
 
-// batasi supaya tidak terlalu lebar
-if(lebarKolom2 > 120) lebarKolom2 = 120;
+doc.setFont("helvetica","normal");
+doc.setFontSize(8);
+
+doc.text(
+"Human Resource and General Affair Division",
+15,
+15
+);
+
+doc.text(
+"General Affair Department",
+15,
+19
+);
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(16);
+
+doc.text(
+"LAPORAN TOLL PARKIR",
+105,
+28,
+{align:"center"}
+);
+
+doc.line(62,30,148,30);
+
+
+/* ================= IDENTITAS ================= */
+
+let bulan =
+document.getElementById("bulan").value;
+
+let tahun =
+document.getElementById("tahun").value;
+
+let periode =
+(bulan && tahun)
+? bulan + " " + tahun
+: "-";
+
+let namaUser =
+document.getElementById("namaUser").value;
+
+let driver =
+document.getElementById("driver").value;
+
+
+/* ukuran otomatis */
+
+let identitasKiri =
+["Nama User","Driver","Periode"]
+.reduce((a,b)=>
+a.length>b.length?a:b
+);
+
+let identitasKanan =
+[namaUser,driver,periode]
+.reduce((a,b)=>
+a.length>b.length?a:b
+);
+
+let identitasW1 =
+doc.getTextWidth(
+identitasKiri
+) + 10;
+
+let identitasW2 =
+doc.getTextWidth(
+identitasKanan
+) + 12;
+
+if(identitasW2 > 120)
+identitasW2 = 120;
+
+
+/* tabel identitas */
 
 doc.autoTable({
-  startY:48,
-  body:[
-    ['Nama User', namaUser],
-    ['Driver', driver],
-    ['Periode', periodeText]
-  ],
-  theme:'grid',
-  styles:{
-    fontSize:9,
-    cellPadding:2
-  },
-  columnStyles:{
-    0:{ cellWidth: lebarKolom1 },
-    1:{ cellWidth: lebarKolom2 }
-  }
+
+startY:45,
+
+body:[
+["Nama User",namaUser],
+["Driver",driver],
+["Periode",periode]
+],
+
+theme:"grid",
+
+styles:{
+fontSize:9,
+cellPadding:2
+},
+
+columnStyles:{
+0:{cellWidth:identitasW1},
+1:{cellWidth:identitasW2}
+}
+
 });
 
 
-  /* ================= TABEL DATA ================= */
+/* ================= TABEL DATA ================= */
 
-  let tableData = [];
+let tableData = [];
 
-  document
-  .querySelectorAll("#tableBody tr")
-  .forEach(row=>{
+document
+.querySelectorAll(
+"#tableBody tr"
+)
+.forEach(row=>{
 
-    let inputs = row.querySelectorAll("input");
+let inputs =
+row.querySelectorAll("input");
 
-    tableData.push([
-      row.cells[0].innerText,
-      inputs[0].value,
-      inputs[1].value,
-      inputs[2].value,
-      inputs[3].value,
-      inputs[4].value,
-      inputs[5].value,
-      inputs[6].value
-    ]);
+tableData.push([
 
-  });
+row.cells[0].innerText,
 
-  doc.autoTable({
+inputs[0].value,
+inputs[1].value,
+inputs[2].value,
+inputs[3].value,
+inputs[4].value,
+inputs[5].value,
+inputs[6].value
 
-    startY: doc.lastAutoTable.finalY + 8,
+]);
 
-    head:[[
-      "No",
-      "Tanggal",
-      "Lokasi Awal",
-      "Tujuan",
-      "Parkir",
-      "Flazz BCA",
-      "Tunai",
-      "KM"
-    ]],
-
-    body: tableData,
-
-    theme:"grid",
-
-    styles:{
-      fontSize:8,
-      lineWidth:0.2,
-      lineColor:[180,180,180]
-    },
-
-    headStyles:{
-      fontSize:8
-    },
-
-    columnStyles:{
-      0:{cellWidth:10},
-      1:{cellWidth:22},
-      2:{cellWidth:35},
-      3:{cellWidth:35},
-      4:{cellWidth:22},
-      5:{cellWidth:25},
-      6:{cellWidth:20},
-      7:{cellWidth:12}
-    }
-
-  });
+});
 
 
-  /* ================= TOTAL ================= */
+doc.autoTable({
+
+startY:
+doc.lastAutoTable.finalY + 8,
+
+head:[[
+"No",
+"Tanggal",
+"Lokasi Awal",
+"Tujuan",
+"Parkir",
+"Flazz BCA",
+"Tunai",
+"KM"
+]],
+
+body: tableData,
+
+theme:"grid",
+
+styles:{
+fontSize:8,
+lineWidth:0.2
+},
+
+headStyles:{
+fontSize:8
+},
+
+columnStyles:{
+0:{cellWidth:10},
+1:{cellWidth:22},
+2:{cellWidth:35},
+3:{cellWidth:35},
+4:{cellWidth:30},
+5:{cellWidth:25},
+6:{cellWidth:20},
+7:{cellWidth:12}
+}
+
+});
+
+
+/* ================= TOTAL ================= */
+
+let finalY =
+doc.lastAutoTable.finalY + 10;
+
+let totalFlazz =
+document.getElementById(
+"totalFlazz"
+).value;
+
+let totalTunai =
+document.getElementById(
+"totalTunai"
+).value;
+
+let grandTotal =
+document.getElementById(
+"grandTotal"
+).value;
+
+
+/* auto width */
+
+let totalKiri =
+["Total Flazz BCA",
+"Total Tunai",
+"Sub Total"]
+.reduce((a,b)=>
+a.length>b.length?a:b
+);
+
+let totalKanan =
+[totalFlazz,totalTunai,grandTotal]
+.reduce((a,b)=>
+a.length>b.length?a:b
+);
+
+let totalW1 =
+doc.getTextWidth(
+totalKiri
+) + 10;
+
+let totalW2 =
+doc.getTextWidth(
+totalKanan
+) + 12;
+
+if(totalW2 > 120)
+totalW2 = 120;
+
+let x = 15;
 
 doc.setFontSize(9);
 
-let finalY = doc.lastAutoTable.finalY + 10;
 
-// ambil isi total
-let totalFlazz = document.getElementById("totalFlazz").value;
-let totalTunai = document.getElementById("totalTunai").value;
-let grandTotal = document.getElementById("grandTotal").value;
+/* flazz */
 
-// cari label terpanjang kiri
-let kiriTerpanjang = ["Total Flazz BCA","Total Tunai","Sub Total"]
-  .reduce((a,b)=> a.length > b.length ? a : b);
+doc.rect(x,finalY,totalW1,8);
+doc.rect(
+x+totalW1,
+finalY,
+totalW2,
+8
+);
 
-// cari nilai terpanjang kanan
-let kananTerpanjang = [totalFlazz,totalTunai,grandTotal]
-  .reduce((a,b)=> a.length > b.length ? a : b);
+doc.text(
+"Total Flazz BCA",
+x+2,
+finalY+5.5
+);
 
-// hitung lebar otomatis
-let totalW1 = doc.getTextWidth(kiriTerpanjang) + 8;
-let totalW2 = doc.getTextWidth(kananTerpanjang) + 12;
-
-// batas maksimal
-if(totalW2 > 120) totalW2 = 120;
-
-let totalX = 15;
-
-
-// Total Flazz
-doc.rect(totalX, finalY, totalW1, 8);
-doc.rect(totalX + totalW1, finalY, totalW2, 8);
-
-doc.text("Total Flazz BCA", totalX + 2, finalY + 5.5);
-doc.text(totalFlazz,
-  totalX + totalW1 + totalW2 - 3,
-  finalY + 5.5,
-  {align:"right"}
+doc.text(
+totalFlazz,
+x+totalW1+totalW2-3,
+finalY+5.5,
+{align:"right"}
 );
 
 
-// Total Tunai
-doc.rect(totalX, finalY + 8, totalW1, 8);
-doc.rect(totalX + totalW1, finalY + 8, totalW2, 8);
+/* tunai */
 
-doc.text("Total Tunai", totalX + 2, finalY + 13.5);
-doc.text(totalTunai,
-  totalX + totalW1 + totalW2 - 3,
-  finalY + 13.5,
-  {align:"right"}
+doc.rect(
+x,
+finalY+8,
+totalW1,
+8
+);
+
+doc.rect(
+x+totalW1,
+finalY+8,
+totalW2,
+8
+);
+
+doc.text(
+"Total Tunai",
+x+2,
+finalY+13.5
+);
+
+doc.text(
+totalTunai,
+x+totalW1+totalW2-3,
+finalY+13.5,
+{align:"right"}
 );
 
 
-// Sub Total
-doc.rect(totalX, finalY + 16, totalW1, 8);
-doc.rect(totalX + totalW1, finalY + 16, totalW2, 8);
+/* subtotal */
 
-doc.text("Sub Total", totalX + 2, finalY + 21.5);
-doc.text(grandTotal,
-  totalX + totalW1 + totalW2 - 3,
-  finalY + 21.5,
-  {align:"right"}
+doc.rect(
+x,
+finalY+16,
+totalW1,
+8
+);
+
+doc.rect(
+x+totalW1,
+finalY+16,
+totalW2,
+8
+);
+
+doc.text(
+"Sub Total",
+x+2,
+finalY+21.5
+);
+
+doc.text(
+grandTotal,
+x+totalW1+totalW2-3,
+finalY+21.5,
+{align:"right"}
 );
 
 
-  /* ================= SAVE ================= */
+/* ================= SAVE ================= */
 
-  let namaFile =
-  "Rekapan_" +
-  periode.replace(/\s+/g,"_") +
-  ".pdf";
+let namaFile =
+"Rekapan_" +
+periode.replace(/\s+/g,"_") +
+".pdf";
 
-  doc.save(namaFile);
+doc.save(namaFile);
 
 }
+
+catch(err){
+
+console.log(err);
+
+alert(
+"Error PDF : " +
+err.message
+);
+
+}
+
+}
+
 </script>
 
 </body>
